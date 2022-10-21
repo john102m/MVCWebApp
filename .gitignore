@@ -100,7 +100,7 @@ StyleCopReport.xml
 
 # Ignores compiled TypeScript files
 **/wwwroot/js/TestFile1.map
-**/wwwroot/js/TestFile1.js
+**/wwwroot/js//TestFile1.js
 
 
 # Chutzpah Test files
@@ -366,3 +366,5 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+/MVCWebApp/wwwroot/js/TestFile1.js
+/MVCWebApp/wwwroot/js/TestFile1.js.map

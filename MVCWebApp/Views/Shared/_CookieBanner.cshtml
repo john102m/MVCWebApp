@@ -1,0 +1,54 @@
+﻿@{
+
+}
+<style>
+    .cookieBanner {
+        display: inline-block;
+        /*height: 52px;*/
+        width: 100%;
+        border: 1px solid black;
+        padding: 15px;
+        margin: 2px;
+        background-color: beige;
+    }
+
+</style>
+
+<div id="cookieBanner" class="text-center alert alert-warning">
+    <p>
+        This site uses cookies.  Non essential and user settings?
+        <input type="button" class="btn btn-sm btn-success" value="Accept" onclick="btnClick(this.value)">
+        <input type="button" class="btn btn-sm btn-danger" value="Reject" onclick="btnClick(this.value)">
+    </p>
+
+</div>
+
+<script type="text/javascript">
+    function btnClick(value) {
+        var cookie = new Object();
+        cookie.Id = 1;
+        cookie.Name = "Site Cookie";
+        cookie.Value = value;
+        cookie.SettingDate = new Date();
+
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("CookieSet","Home")',
+            cache: false,
+            data: JSON.stringify(cookie),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function(response) {
+                console.log(response);
+                $('#cookieBanner').hide(50);
+            },
+            failure: function(response) {
+                alert("failure");
+            },
+            error: function(response) {
+                alert("error");
+            }
+        });
+    };
+</script>
+

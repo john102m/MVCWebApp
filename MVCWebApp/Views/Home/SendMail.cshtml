@@ -1,0 +1,71 @@
+﻿@model MVCWebApp.Models.MailRequest
+@{
+    ViewData["Title"] = "Send Email";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<partial name="_StatusMessage"/>
+
+<h1>Email</h1>
+
+
+<form asp-action="SendEmail" id="fileCatcher" method="post" enctype="multipart/form-data">
+    <div class="form-group">
+        Recipient:
+        <input type="text" asp-for="@Model.ToEmail" />
+        <span asp-validation-for="@Model.ToEmail" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        Subject:
+        <input type="text" asp-for="@Model.Subject" />
+    </div>
+
+    <div class="form-group">
+        Message: <br />
+        <textarea asp-for="@Model.Body" cols="65" rows="8"></textarea>
+    </div>
+
+    <div class="form-group">
+        <input type="submit" value="Send" class="btn btn-primary"
+               style="width:auto" />
+
+        <a asp-action="Index"
+           class="btn btn-primary" style="width:auto">Cancel</a>
+    </div>
+
+
+    <div class="form-group">
+        <br />
+        <label class="btn btn-primary mt-3" for="fileInput">Add Attachments</label>
+        <input type="file" id="fileInput" multiple asp-for="@Model.Attachments" hidden />
+        <span asp-validation-for="@Model.Attachments" class="text-danger"></span>
+
+    </div>
+    <br />
+    <div id="attachmentList"></div>
+</form>
+<script>
+
+    var fileList = [];
+
+    function logFilenames() {
+        const files = fileInput.files;
+        Array.from(files).forEach(function(item) {
+            fileList.push(item);
+        });
+        var arrayOfNames = [];
+        fileList.forEach( (item) => { arrayOfNames.push(item.name) } );
+        attachmentList.innerHTML = arrayOfNames.join('; ');
+    }
+
+    function addFilenames() {
+        console.log('adding filenames.....');
+        let list = new DataTransfer();
+        fileList.forEach((item) => { list.items.add(item) });
+        fileInput.files = list.files;
+    }
+
+    fileInput.addEventListener("change", logFilenames);
+    fileCatcher.addEventListener("submit", addFilenames);
+
+</script>

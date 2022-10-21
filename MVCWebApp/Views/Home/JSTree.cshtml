@@ -1,0 +1,131 @@
+﻿@model IEnumerable<TreeNode>
+@using System.Text.Json;
+
+
+@{
+    ViewData["Title"] = "JS Tree Test";
+}
+
+@{
+    string jsonString = JsonSerializer.Serialize(Model);
+}
+
+
+<style>
+    .sidebox, .mainbox {
+        width: auto;
+        border: 2px solid darkblue;
+        padding: 25px 20px 25px 0px; /*top right bottom left*/
+        margin: 5px;
+        text-align: center;
+        overflow-x:clip;
+        flex-direction: column;
+    }
+
+    .mainbox {
+        /*color: cornflowerblue;*/
+        padding: 5px 5px 25px 5px; /*top right bottom left*/
+        margin: 5px;
+    }
+
+</style>
+
+<div class="text-center">
+    <h1>JS Tree Example</h1>
+    <h5>Node 6 stores a cookie</h5>
+</div>
+<hr />
+
+<div class=container-fluid>
+    <div class=row>
+        <div class=col-md-4>
+            <div class=sidebox>
+                <div id=jstree></div>
+                <button id="btn1" class="btn btn-success btn-sm">Select</button>
+                <button id="btn2" class="btn btn-success btn-sm">Select</button>
+            </div>
+        </div>
+        <div class=col-md-8>
+            <div id=mainarea class=mainbox>
+                <p>The contents of the big main box</p>
+                <a href="" id=linktarget>XXXXX</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+        $(function () {
+            // 6 create an instance when the DOM is ready
+            $('#jstree').jstree({
+                "core" : {
+                "animation": 200,
+                "themes" : {
+                    "variant" : "large"
+                  },
+                 "data" :  @Html.Raw(jsonString)
+                },
+                "plugins" : ["wholerow"]
+
+
+            }).bind("select_node.jstree", function (e, data) {
+                    //triggers when select_node called
+                    console.log("select_node was called");
+                    console.log(e);
+                    console.log(data);
+                    console.log(data.node['id']);
+                    console.log(data.node['text']);
+                    console.log(data.node.data);
+            });
+
+             // bind customize icon change function in jsTree open_node event.
+            $('#jstree').on('open_node.jstree', function(e, data){
+                var icon = $('#' + data.node.id).find('i.jstree-icon.jstree-themeicon').first();
+                icon.removeClass('fa fa-folder').addClass('fa fa-folder-open');
+            });
+
+            // bind customize icon change function in jsTree close_node event.
+            $('#jstree').on('close_node.jstree', function(e, data){
+                var icon = $('#' + data.node.id).find('i.jstree-icon.jstree-themeicon').first();
+                icon.removeClass('fa fa-folder-open').addClass('fa fa-folder');
+            });
+
+
+
+            $('#jstree').on("click.jstree", function (e, data) {
+                //if (data.node['icon'].indexOf('folder') !== -1)
+                    console.log("folder click tree");//do something whenn node expander is clicked
+                    console.log(data);
+            });
+
+            //$('#jstree').on('before_open.jstree', function(e, data){
+            //    $("#jstree").jstree("close_all");
+            //});
+
+
+            // 7 bind to events triggered on the tree
+            $('#jstree').on("changed.jstree", function (e, data) {
+                console.log("click");
+                console.log(data.selected);
+
+
+                if (data.node['id'] == 'nd5') {console.log('You clicked Node 5') }
+                $('#linktarget').html(data.node.data);
+                $('#linktarget').prop("href", data.node.data)
+            });
+
+            // 8 interact with the tree - either way is OK
+            $('#btn1').on('click', function () {
+                $('#jstree').jstree(true).select_node('nd1');
+                $('#mainarea').delay(100).fadeIn('fast');
+                //$('#jstree').jstree('select_node', 'child_node_1');
+                //$.jstree.reference('#jstree').select_node('child_node_1');
+            });
+            $('#btn2').on('click', function () {
+                $('#jstree').jstree(true).select_node('nd3');
+                $('#mainarea').delay(100).fadeOut('slow');
+                //$('#jstree').jstree('select_node', 'child_node_1');
+                //$.jstree.reference('#jstree').select_node('child_node_1');
+            });
+        });
+</script>

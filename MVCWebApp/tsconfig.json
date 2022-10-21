@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "noImplicitAny": false,
+    "noEmitOnError": true,
+    "removeComments": false,
+    "sourceMap": true,
+    "target": "es5",
+    "module": "system",
+    "moduleResolution": "node",
+    "experimentalDecorators": true,
+    // https://maxisam.github.io/2017/01/03/rootDirs-in-tsconfig/
+    "rootDir": "Scripts", // rootDir is for the location of the source code
+    "baseUrl": "node_modules", // baseUrl is for non-relative modules import so it should be set as node_modules
+    "outDir": "wwwroot/js"
+  },
+
+
+  "compileOnSave": true
+}

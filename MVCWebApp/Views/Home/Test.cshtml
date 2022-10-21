@@ -1,0 +1,141 @@
+﻿@model MVCWebApp.Models.TestViewModel
+
+@{
+
+    ViewData["Title"] = "Test Page";
+    //var test = "A wee drop Typescript stuff: ";
+
+}
+
+
+
+<div class="text-center">
+
+    @*<canvas></canvas>*@
+    <h1 id="pageTitle">General Test Area</h1>
+    @*
+    <a class="nav-link text-dark" asp-controller="Home" asp-action="Privacy">Privacy</a>
+    <a class="nav-link" asp-controller="Home" asp-action="Test">Test</a>
+    <a asp-controller="Home" asp-action="Index">Homepage</a>
+
+    <br />
+    <b> ALL SPACES REMOVED:&nbsp @Model.TestString &nbsp; RANDOM NUMBER: @Model.RandomNumber</b>
+    <br />
+    @Html.BoldBreak("Hello World")
+    @Html.File("3")
+    @CustomHelpers.File("3")
+
+
+    <u>@test</u>
+    <br /> <br />
+    *@
+    <div id="test">This is the test div</div>
+
+
+    <p>A paragraph</p>
+    <p class="myclass" id="theid" data="test">A myclass paragraph a data attribute</p>
+    <div class="myclass" id="theid2" data="test">A myclass div a data attribute</div>
+    <p class="aclass" data="test">A aclass act paragraph a data attribute</p>
+    <br />
+    <div id="test1"></div>
+    <div id="test2"></div>
+    <br />
+
+    <button>Click me to hide myclass paragraphs</button>
+
+
+</div>
+<br />
+
+@*<div class="row justify-content-center">
+    @using (Html.BeginForm("Test", "Home", FormMethod.Post))
+    {
+    @Html.LabelFor(m => m.TestString)
+    @Html.TextBoxFor(m => m.TestString, new { style="width:250px;" })
+    <input type="submit" value="Submit" />
+    }
+    </div>
+
+*@
+
+<script type="text/javascript" src="~/js/TestFile1.js"></script>
+<script>
+
+
+
+    $(document).ready(function() {
+
+        var date1 = "15/04/2021";
+        let ms1 = Date.parse(AdjustDateFormat(date1));
+
+        var date2 = "16/04/2022";
+        let ms2 = Date.parse(AdjustDateFormat(date2));
+
+        var result = moment(date1, "DD-MM-YYYY").diff(moment(date2, "DD-MM-YYYY"));
+        console.log(result);
+
+
+        $('#pageTitle').html("The Heading");
+
+        $("button").click(function() {
+            //$("p").hide();
+            //$("p.myclass[data='test']").hide();
+
+            $("p.myclass[data='test']").fadeTo("slow", 0.00, function() { //fade
+                $(this).slideUp("slow", function() { //slide up
+                    $(this).remove(); //then remove from the DOM
+                });
+            });
+
+            $("div.myclass[data='test']").fadeTo("slow", 0.00, function() { //fade
+                $(this).slideUp("slow", function() { //slide up
+                    $(this).remove(); //then remove from the DOM
+                });
+            });
+        });
+
+
+
+
+        function AdjustDateFormat(date) {
+            let arr = date.split('/');
+            date = arr[1] + '/' + arr[0] + '/' + arr[2];
+            return date;
+        }
+        var number = 1;
+
+
+        var strStyle = `<pre><b style='font-size:40px'><i>result ${number}:</i>    `;
+        $('#test1').html(strStyle + ms1 + "</b></pre>");
+
+        number = 2;
+        strStyle = `<pre><b style='font-size:40px'><i>result ${number}:</i>    `;
+        $('#test2').html(strStyle + (ms1 > ms2) + "</b></pre>");
+
+        myObj = {
+            name: "World!",
+        };
+
+        obj = {
+            x: 10,
+            y: 800,
+            name: "Origin",
+            randprop: { test1: 3, test2: "won't see this" }
+        };
+
+        logPoint(obj);
+        //document.getElementById("test").innerHTML = logName(obj)
+        //+ "<br/>" + logName(myObj)
+        //+ "<br/>" + logName({name:"Foonterbinty"})
+        //+ "<br/>" + logPoint(obj)
+        //+ "<br/>" + logPoint({x:5.090, y:9});
+    });
+</script>
+
+<style>
+    body {
+        margin: 0;
+        font-size: 25px;
+    }
+
+</style>

@@ -1,0 +1,48 @@
+﻿@using System.Text.Json;
+@model MVCWebApp.Controllers.UserInfo
+
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+
+    ViewData["Title"] = "JS Pivot Table Function Example";
+
+    //var id = ViewData["UserId"];
+    //string username = (string)ViewData["UserName"];
+    //var email = ViewData["UserEmail"];
+    
+
+}
+
+<div class="text-center">
+    <h1>JS Pivot Table Function Example #3</h1>
+    <h5>
+        This example shows custom aggregators and sorters using
+        the "Canadian Parliament 2012" dataset.
+    </h5>
+</div>
+
+<hr />
+
+<div id="output"></div>
+<hr />
+@if (!string.IsNullOrEmpty(Model.Name))
+{
+    <p><u>Configuration settings</u></p>
+    <button id="save" class="btn btn-sm btn-success">Save</button>
+    <button id="restore" class="btn btn-sm btn-success">Restore</button>
+
+}
+
+@*ES6 string interpolation with backticks*@
+<script>
+    //var SystemUserName = `@Model.Name`;
+    //var SystemUserId = `@Model.ID`;
+    //var SystemUserId = @Html.Raw(JsonSerializer.Serialize(Model.ID));
+    //var SystemUserName = @Html.Raw(JsonSerializer.Serialize(Model.Name));
+
+    var SystemUser = @Html.Raw(JsonSerializer.Serialize(Model));
+</script>
+
+<script src="@Url.Content("~/js/pivottables.js")"></script>

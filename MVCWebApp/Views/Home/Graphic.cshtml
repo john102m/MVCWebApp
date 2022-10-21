@@ -1,0 +1,140 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    ViewData["Title"] = "HTML5 Canvas Example";
+}
+<div class="text-center">
+    <h1>HTML5 Canvas Example</h1>
+    <h5 id="info">FPS</h5>
+
+</div>
+
+@*<img id="myImage" src="~/images/potion.png">*@
+
+
+<canvas id="canvas" width="750" height="400" style="border:1px solid lightgrey;">
+    Your browser does not support the HTML5 canvas tag.
+</canvas>
+
+<script>
+
+    "use strict";
+
+    let img = new Image();//document.getElementById("myImage");
+    let canvas;
+    let ctx;
+
+    let numColumns = 5;
+    let numRows = 2;
+
+    // Define the size of a frame
+    let frameWidth;
+    let frameHeight;
+
+    // The sprite image frame starts from 0
+    let currentFrame = 0;
+    let maxFrame = numColumns * numRows - 1;
+
+    let secondsPassed;
+    let oldTimeStamp;
+    let fps;
+    let speed = 5;
+    let ticks = 0;
+    let x = 5;
+    let y = 5;
+    let xmove=4;
+    let ymove=2;
+    let bkImage;//, oldbkImage;
+
+    window.onload = init;
+
+    function init(){
+
+        // Get a reference to the canvas
+        canvas = document.getElementById('canvas');
+        ctx = canvas.getContext('2d');
+        
+        img.onload = function() {
+           drawStart();
+        };
+        img.src = '/images/sprite_animation.png';
+       
+    }
+
+    function drawStart(){
+
+        // Get a random color, red or blue
+        let randomColor = Math.random() > 0.5 ? '#ff8080' : '#0099b0';
+
+        // Draw a rectangle
+        //context.fillStyle = randomColor;
+        //context.fillRect(100, 50, 200, 175);
+        ctx.imageSmoothingEnabled = true;
+        ctx.imageSmoothingQuality = 'high';
+        frameWidth = img.width / numColumns;
+        frameHeight = img.height / numRows;
+
+
+        //scaling
+        //context.drawImage(img, 10, 30, img.width / 2, img.height / 2);
+        //clipping
+        //context.drawImage(img, 100, 0, 200, 50, 10, 30, 200, 50);
+
+        window.requestAnimationFrame(gameLoop);
+
+    }
+
+
+    function draw() {
+        // Pick a new frame
+        if( ticks++ > speed ) {
+            currentFrame++;
+            ticks = 0;
+        }
+
+        
+        // Make the frames loop
+        if (currentFrame > maxFrame) currentFrame = 0;
+        
+
+        // Update rows and columns
+        let column = currentFrame % numColumns;
+        let row = Math.floor(currentFrame / numColumns);
+
+        //draw backround on previous sprite pos   
+        if (bkImage !== undefined) ctx.putImageData(bkImage, x-xmove, y-ymove);
+
+        // get background from current sprite pos
+        bkImage = ctx.getImageData(x, y, frameWidth, frameHeight);
+
+        // draw sprite at current pos
+        ctx.drawImage(img, column * frameWidth, row * frameHeight, frameWidth, frameHeight, x, y, frameWidth, frameHeight);
+
+
+
+    }
+
+    
+
+    function gameLoop(timeStamp) {
+
+        // Calculate the number of seconds passed since the last frame
+        secondsPassed = (timeStamp - oldTimeStamp) / 1000;
+        oldTimeStamp = timeStamp;
+
+        // Calculate fps
+        fps = Math.round(1 / secondsPassed);
+        $('#info').html(fps + " FPS");
+
+        draw();
+
+        x+=xmove; if(x > 700) x=5;   
+        y+=ymove; if(y > 350) y=5;
+            
+       
+        window.requestAnimationFrame(gameLoop);
+    }
+
+
+</script>

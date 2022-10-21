@@ -1,0 +1,21 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    string message = (string)TempData["StatusMessage"];
+}
+@if (message != null)
+{
+
+    string msgType = (message.Contains("Success")) ? "success" : "warning";
+    {
+        <div class="alert alert-@msgType alert-dismissible" role="alert">
+            <strong>@TempData["StatusMessage"]</strong>
+            @*<span type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true"></span></span>*@
+            <i class="icon-dark fa fa-close fa-fw fa-lg" data-dismiss="alert" style="font-size:24px;color:black;cursor:pointer"></i>
+        
+        </div>
+        <br />
+    }
+
+}

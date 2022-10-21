@@ -1,0 +1,46 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+
+    ViewData["Title"] = "JS Pivot Table Function Example";
+}
+
+<div class="text-center">
+    <h1>JS Pivot Table Function Example #2</h1>
+    <h5>This example shows pivot() with a sum() aggregator
+     with custom formatting (no digits after decimal)</h5>
+</div>
+<hr />
+
+<div id="output"></div>
+
+
+<script>
+
+    // This example shows pivot() with a sum() aggregator
+    // with custom formatting (no digits after decimal)
+
+    $(function(){
+
+        var sum = $.pivotUtilities.aggregatorTemplates.sum;
+        var numberFormat = $.pivotUtilities.numberFormat;
+        var intFormat = numberFormat({digitsAfterDecimal: 0});
+
+        $("#output").pivot(
+            [
+                {color: "blue", shape: "circle", value: 1},
+                {color: "red", shape: "triangle", value: 2},
+                {color: "blue", shape: "circle", value: 3},
+                {color: "red", shape: "triangle", value: 4}
+            ],
+            {
+                rows: ["color"],
+                cols: ["shape"],
+                aggregator: sum(intFormat)(["value"])
+            }
+        );
+     });
+        
+
+</script>

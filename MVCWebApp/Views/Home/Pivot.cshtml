@@ -1,0 +1,50 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+
+    ViewData["Title"] = "JS Pivot Table Function Example";
+}
+
+<div class="text-center">
+    <h1>JS Pivot Table Function Example</h1>
+    <h5>This example uses a function to provide the input values to pivot()</h5>
+</div>
+<hr />
+
+<div id="output"></div>
+
+
+
+<script>
+
+        // This example uses a function to provide the input values to pivot()
+
+    $(function () {
+        var lookupColour = ["blue", "yellow"];
+        var rawData = [
+            { color: 0, shape: "circle"},
+            { color: 1, shape: "circle"},
+            { color: 1, shape: "circle"},
+            { color: 0, shape: "triangle"},
+            { color: 0, shape: "triangle"},
+            { color: 1, shape: "triangle"}
+            ];
+        var inputFunction = function (callback) {
+            rawData.forEach(function (element, index) {
+                callback({
+                    color: lookupColour[element.color],
+                    shape: element.shape
+                });
+            });
+        };
+
+        $("#output").pivot(inputFunction, {
+            rows: ["color"],
+            cols: ["shape"]
+        });
+    });
+
+
+
+</script>

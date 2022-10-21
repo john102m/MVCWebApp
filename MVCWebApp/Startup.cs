@@ -36,7 +36,7 @@ namespace MVCWebApp
         public void ConfigureServices(IServiceCollection services)
         {           
             services.Configure<MailSettings>(Configuration.GetSection("MailSettings"));
-            services.AddTransient<IMailService, MailService>();
+            services.AddScoped<IMailService, MailService>();
             services.AddTransient<ICyberSecurity, CyberSecurity>();
 
             // Add EF services to the services container.
@@ -76,6 +76,12 @@ namespace MVCWebApp
                 options.User.AllowedUserNameCharacters =
                 "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
                 options.User.RequireUniqueEmail = false;
+            });
+
+
+            services.Configure<IdentityOptions>(opts =>
+            {
+                //opts.SignIn.RequireConfirmedEmail = true;
             });
 
             services.ConfigureApplicationCookie(options =>

@@ -14,6 +14,6 @@ function logPoint(point: Pointlike): string {
 }
 
 function logName(x: Named) {
-    return "Hello there, " + x.name;
+    return "Hello there, how's things" + x.name + "?";
 }
 

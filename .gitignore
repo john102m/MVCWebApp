@@ -98,6 +98,11 @@ StyleCopReport.xml
 *.svclog
 *.scc
 
+# Ignores compiled TypeScript files
+**/wwwroot/js/TestFile1.map
+**/wwwroot/js/TestFile1.js
+
+
 # Chutzpah Test files
 _Chutzpah*
 

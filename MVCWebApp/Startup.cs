@@ -67,22 +67,20 @@ namespace MVCWebApp
                 options.Password.RequiredUniqueChars = 1;
 
                 // Lockout settings.
-                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
-                options.Lockout.MaxFailedAccessAttempts = 5;
-                options.Lockout.AllowedForNewUsers = false;
+                //options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
+                //options.Lockout.MaxFailedAccessAttempts = 5;
+                //options.Lockout.AllowedForNewUsers = false;
                 // options.Lockout.
 
                 // User settings.
                 options.User.AllowedUserNameCharacters =
                 "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
-                options.User.RequireUniqueEmail = false;
+                options.User.RequireUniqueEmail = true;
+                options.SignIn.RequireConfirmedEmail = true;
+                
             });
 
 
-            services.Configure<IdentityOptions>(opts =>
-            {
-                //opts.SignIn.RequireConfirmedEmail = true;
-            });
 
             services.ConfigureApplicationCookie(options =>
             {

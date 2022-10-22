@@ -132,6 +132,7 @@ namespace MVCWebApp.Areas.Identity.Pages.Account
                 }
                 else
                 {
+                    
                     ModelState.AddModelError(string.Empty, "Invalid login attempt.");
                     return Page();
                 }

@@ -65,7 +65,13 @@ namespace MVCWebApp.Areas.Services
             email.Body = builder.ToMessageBody();
 
             var message = "";
-            using var smtp = new SmtpClient();
+
+            //With the new C# 8 using declaration, the code with the using statement can be simplified. 
+            //Curly brackets are no longer needed. At the end of the scope of the variable r
+            //(which is here the end of the method), the Dispose method is invoked.9 Apr 2019
+            using var smtp = new SmtpClient();   
+
+
             smtp.MessageSent += async (sender, args) =>
             {
                 var myTask = await Task.Run(() => message = args.Response);

@@ -8,6 +8,7 @@
 		<NoWarn>$(NoWarn);NU1701</NoWarn>
 	</PropertyGroup>
 	<ItemGroup>
+	  <Content Remove="wwwroot\downloads\TestFile1.ts" />
 	  <Content Remove="wwwroot\favicon_package_v0.16.zip" />
 	</ItemGroup>
 
@@ -34,6 +35,10 @@
 
 	<ItemGroup>
 		<Folder Include="src\" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Include="wwwroot\downloads\TestFile1.ts" />
 	</ItemGroup>
 
 </Project>

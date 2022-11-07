@@ -4,21 +4,26 @@
 
 <partial name="_StatusMessage" />
 
+<div class="jumbotron jumbotron-fluid">
+
+
+        <p class="text-center">Welcome</p>
+
+
+</div>
+
 
 <div class="text-center" style="align-content:center">
 
-    <div class="bigtext">Welcome</div>
-
-    <video width="470" height="360" autoplay muted loop>
-        <source src="~/images/clip2.mp4" type="video/mp4" />
-        Your browser does not support the video tag.
+    @*    <video width="235" height="180" autoplay muted loop>
+    <source src="~/images/clip2.mp4" type="video/mp4" />
+    Your browser does not support the video tag.
     </video>
+    *@
 
-
-
-    <p class="medtext">This site is to test (ASP.NET Core MVC)</p>
-    <div class="text">
-        <p>(Identity framework uses Razor pages)</p>
+    <br />
+    <p class="bigtext">A site using (ASP.NET Core MVC)</p>
+    <div class="medtext">
         <p>.NET Core Version 6.0 or just known as .NET 6.0</p>
 
         <p>Learn about <a href="https://www.spooch.co.uk" target="_blank">A web app I built with ASP.NET Framework(4.7.2)</a>.</p>
@@ -30,22 +35,45 @@
 
     </div>
 
+
+    @if (User.IsInRole(Roles.SuperAdmin.ToString()))
+    {
+        <p>
+            <a asp-action="FileIndex">See Files</a>
+        </p>
+    }
 </div>
 
 
+<br />
+
 <style>
-    .text, .medtext, .bigtext{
-        font: small-caps bold 12px/30px "Comic Sans Serif", "Comic Sans MS", "Comic Sans", cursive;
+    .text, .medtext, .bigtext {
+        font: small-caps bold 12px/30px;
         color: darkblue;
-        font-size: large;
+        font-size:medium;
     }
 
     .medtext {
-        font-size:35px;
-    }    
-    
+        font-size: large;
+    }
+
     .bigtext {
-        font-size:50px;
+        font-size: x-large;
+    }
+
+    .jumbotron {
+        position: relative;
+        background: url("/images/gourock_banner.png");
+        background-repeat: no-repeat;
+        background-size: auto;
+        min-height: 50vh;
+        overflow: hidden;
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 7vw;
+        color: white;
+        /*vertical-align: middle;*/
+        line-height: 50vh;
     }
 
 </style>

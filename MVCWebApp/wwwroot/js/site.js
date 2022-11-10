@@ -6,12 +6,20 @@
 
 
 $(document).ready(function () {
-    var url = window.location.protocol + "//" + window.location.host + "/home/keepalive"; 
+    const url = window.location.protocol + "//" + window.location.host + "/home/keepalive"; 
+    const worker = new Worker('/js/worker.js');
 
-    setInterval(httpGet, 600000);
+    worker.onmessage = (e) => httpGet(e); 
 
-    function httpGet() {
+    //setInterval(httpGet, 120000);
+
+    function httpGet(e) {
+
+        console.log('sending keep alive ping to.......');
         console.log(url);
+
+        console.log('service worker incidental message......')
+        console.log(e.data);
         fetch(url).then(function (response) {
             console.log(response);
         }).catch(function () {

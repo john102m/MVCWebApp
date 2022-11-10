@@ -188,6 +188,50 @@ namespace MVCWebApp.Controllers
         {
             return View();
         }
+        public IActionResult ResizeTest()
+        {
+            return View();
+        }
+        public IActionResult PromiseTest()
+        {
+            return View();
+        }
+
+        public JsonResult GetJson()
+        {
+            var thing = new
+            {
+                wotsit = 0,
+                otherThing = "testy"
+
+
+            };
+            JsonResult res = new JsonResult(new
+            {
+                thing,
+                objOne = new
+                {
+                    success = true,
+                    test = "good",
+                    enquiryType = "new",
+                    number = 4
+                },
+                objTwo = new
+                {
+                    success = true,
+                    test = "very good",
+                    enquiryType = "stale",
+                    number = 45.8,
+                    history = "long term",
+                    maidenName = "Gilchrist",
+                    bigTest = 1009009.90099
+                },
+
+            });
+
+            return res;
+        }
+
 
         [HttpGet]
         public IActionResult Test()

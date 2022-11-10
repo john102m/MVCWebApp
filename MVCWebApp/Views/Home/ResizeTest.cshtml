@@ -1,0 +1,110 @@
+﻿@{
+    ViewData["Title"] = "Resize observer text test";
+}
+
+<div>
+    <h1>Resize Observer Example</h1>
+    <p>What is Lorem Ipsum?
+Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release
+of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum</p>
+    <p id="para">other paragraph</p>
+</div>
+<container>
+
+
+    <form>
+        <div>
+            <label>Observer enabled:</label>
+            <input type="checkbox" checked>
+        </div>
+        <div>
+            <label>Adjust width:</label>
+            <input type="range" value="600" min="300" max="1300">
+        </div>
+    </form>
+</container>
+<script>
+    if (window.ResizeObserver) {
+        const paraElem = document.querySelector('#para');
+        const h1Elem = document.querySelector('h1');
+        const pElem = document.querySelector('p');
+        const divElem = document.querySelector('body > div');
+        const slider = document.querySelector('input[type="range"]');
+        const checkbox = document.querySelector('input[type="checkbox"]');
+
+        divElem.style.width = '600px';
+
+        slider.addEventListener('input', () => {
+            divElem.style.width = slider.value + 'px';
+        })
+
+        const resizeObserver = new ResizeObserver(entries => {
+            console.log(entries);
+            for (let entry of entries) {
+                if (entry.contentBoxSize) {
+                    // The standard makes contentBoxSize an array...
+                    if (entry.contentBoxSize[0]) {
+                        h1Elem.style.fontSize = Math.max(1.5, entry.contentBoxSize[0].inlineSize / 200) + 'rem';
+                        pElem.style.fontSize = Math.max(1, entry.contentBoxSize[0].inlineSize / 600) + 'rem';
+                    } else {
+                        // ...but old versions of Firefox treat it as a single item
+                        h1Elem.style.fontSize = Math.max(1.5, entry.contentBoxSize.inlineSize / 200) + 'rem';
+                        pElem.style.fontSize = Math.max(1, entry.contentBoxSize.inlineSize / 600) + 'rem';
+                    }
+
+                } else {
+                    h1Elem.style.fontSize = Math.max(1.5, entry.contentRect.width / 200) + 'rem';
+                    pElem.style.fontSize = Math.max(1, entry.contentRect.width / 600) + 'rem';
+                }
+            }
+            console.log('Size changed');
+        });
+
+        resizeObserver.observe(divElem);
+
+        checkbox.addEventListener('change', () => {
+            if (checkbox.checked) {
+                resizeObserver.observe(divElem);
+            } else {
+                resizeObserver.unobserve(divElem);
+            }
+        });
+    } else {
+        console.log('Resize observer not supported!');
+    }
+</script>
+
+
+
+
+<style>
+
+
+    h1 {
+        margin: 0;
+    }
+
+    p {
+        line-height: 1.5;
+    }
+
+    form {
+        width: 100%;
+    }
+
+        form > div {
+            display: flex;
+        }
+
+        form label {
+            flex: 2;
+        }
+
+        form input {
+            flex: 3;
+        }
+
+    input[type="checkbox"] {
+        height: 2rem;
+    }
+</style>

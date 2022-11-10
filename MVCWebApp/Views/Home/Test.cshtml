@@ -11,6 +11,8 @@
 
 <div class="text-center">
 
+    @*add this comment for th einitial commit of this branch*@
+
     @*<canvas></canvas>*@
     <h1 id="pageTitle">General Test Area</h1>
     @*
@@ -31,7 +33,6 @@
     *@
     <div id="test">This is the test div</div>
 
-
     <p>A paragraph</p>
     <p class="myclass" id="theid" data="test">A myclass paragraph a data attribute</p>
     <div class="myclass" id="theid2" data="test">A myclass div a data attribute</div>
@@ -42,6 +43,7 @@
     <br />
 
     <button>Click me to hide myclass paragraphs</button>
+    <button id="share-button">Share</button>
 
 
 </div>
@@ -64,6 +66,24 @@
 
 
     $(document).ready(function() {
+
+
+
+        $('#share-button').on('click', () => {
+            if (navigator.share) {
+                navigator.share({
+                    title: 'Web Share API Draft',
+                    text: 'Take a look at this spec!',
+                    url: 'https://wicg.github.io/web-share/#share-method',
+                })
+                    .then(() => console.log('Successful share'))
+                    .catch((error) => console.log('Error sharing', error));
+            } else {
+                console.log('Share not supported on this browser, do it the old way.');
+            }
+        });
+
+
 
         var date1 = "15/04/2021";
         let ms1 = Date.parse(AdjustDateFormat(date1));
@@ -124,11 +144,11 @@
         };
 
         logPoint(obj);
-        //document.getElementById("test").innerHTML = logName(obj)
-        //+ "<br/>" + logName(myObj)
-        //+ "<br/>" + logName({name:"Foonterbinty"})
-        //+ "<br/>" + logPoint(obj)
-        //+ "<br/>" + logPoint({x:5.090, y:9});
+        document.getElementById("test").innerHTML = logName(obj)
+            + "<br/>" + logName(myObj)
+            + "<br/>" + logName({ name: "Foonterbinty" })
+            + "<br/>" + logPoint(obj)
+            + "<br/>" + logPoint({ x: 5.090, y: 9 });
     });
 </script>
 

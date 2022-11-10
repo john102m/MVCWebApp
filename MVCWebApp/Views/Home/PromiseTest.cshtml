@@ -1,0 +1,123 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<container>
+
+    <h1>A Promising start to JavaScript promises</h1>
+    <h2>We promise</h2>
+
+    <br>
+    <hr>
+    <textarea style="resize: none" readonly placeholder="status" class="form-control input-sm textarea" id="output" rows="5" cols="40"></textarea>
+
+
+    <br />
+    <button onclick="getData()">Get Json</button>
+
+
+    <button onclick="clearData()">Clear</button>
+
+
+    <br /><br /><br />
+
+    @*    <select id="console" name="console" size="15" style="width:50%;">
+
+    </select>
+    *@
+    <textarea style="resize: none" readonly placeholder="information" class="form-control input-sm textarea" id="console" rows="5" cols="40"></textarea>
+
+</container>
+
+
+<script>
+    const cacheAvailable = 'caches' in self;
+    const con = $('#console');
+    const out = $('#output');
+    $('#status').html('cahes available: ' + cacheAvailable);
+
+    $(document).ready(loadUp);
+
+    function loadUp() {
+
+        echo(con, "doc loaded");
+
+        console.log('loadUp');
+        const cacheName = 'my-cache'
+        const url = '/home/getjson'
+
+        caches.open(cacheName).then(cache => {
+            cache.add(url).then(() => {
+                console.log('done  caching!');
+                echo(con, "done  caching!");
+
+            });
+        });
+
+    }
+
+    function echo(elem, text) {
+        var currentText = elem.val();
+        elem.val(currentText + text + '\r\n');
+        console.log(elem.val());
+        elem.scrollTop(elem[0].scrollHeight);
+
+    }
+    function clearData() {
+        con.val('');
+        out.val('');
+    }
+
+    async function getData() {
+
+        const request = '/home/getjson';
+
+        caches.open('my-cache').then(cache => {
+            cache.match(request).then(item => {
+
+                return item.json();
+
+            }).then(data => {
+
+                echo(con, 'json returned from a cached request');
+                echo(out, JSON.stringify(data));
+
+            })
+        });
+
+        await fetch("https://" + window.location.host + "/home/getjson", {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json'
+            }
+
+        }).then(res => {
+
+            if (res.status === 200) {
+                //echo(res);
+                return res.json();
+            } else {
+                throw new Error(`Got back ${res.status}`);
+            }
+
+        }).then(data => {
+
+            echo(con, 'json returned from a new request');
+            echo(out, JSON.stringify(data));
+
+
+        }).catch(err => {
+
+            echo(con, err);
+            echo(out, err);
+
+
+        }).then(() => {
+            echo(con, 'Fetch operation complete');
+            $('#status').html('Fetch operation complete');
+        });
+
+        return 0;
+    }
+
+</script>

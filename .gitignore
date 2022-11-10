@@ -98,6 +98,8 @@ StyleCopReport.xml
 *.svclog
 *.scc
 
+
+
 # Chutzpah Test files
 _Chutzpah*
 
@@ -361,3 +363,5 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+/MVCWebApp/wwwroot/js/TestFile1.js
+/MVCWebApp/wwwroot/js/TestFile1.js.map

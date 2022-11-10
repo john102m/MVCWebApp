@@ -36,7 +36,7 @@ namespace MVCWebApp
         public void ConfigureServices(IServiceCollection services)
         {           
             services.Configure<MailSettings>(Configuration.GetSection("MailSettings"));
-            services.AddTransient<IMailService, MailService>();
+            services.AddScoped<IMailService, MailService>();
             services.AddTransient<ICyberSecurity, CyberSecurity>();
 
             // Add EF services to the services container.
@@ -67,16 +67,20 @@ namespace MVCWebApp
                 options.Password.RequiredUniqueChars = 1;
 
                 // Lockout settings.
-                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
-                options.Lockout.MaxFailedAccessAttempts = 5;
-                options.Lockout.AllowedForNewUsers = false;
+                //options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
+                //options.Lockout.MaxFailedAccessAttempts = 5;
+                //options.Lockout.AllowedForNewUsers = false;
                 // options.Lockout.
 
                 // User settings.
                 options.User.AllowedUserNameCharacters =
                 "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
-                options.User.RequireUniqueEmail = false;
+                options.User.RequireUniqueEmail = true;
+                options.SignIn.RequireConfirmedEmail = true;
+                
             });
+
+
 
             services.ConfigureApplicationCookie(options =>
             {

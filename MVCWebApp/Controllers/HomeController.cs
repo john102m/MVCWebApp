@@ -2,16 +2,20 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Logging;
 using MVCWebApp.Areas.Services;
 using MVCWebApp.Models;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Security.Claims;
 using System.Text.Json;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Hosting;
+using System.Collections;
 
 
 namespace MVCWebApp.Controllers
@@ -22,7 +26,14 @@ namespace MVCWebApp.Controllers
         public string Name { get; set; }
         public string Email { get; set; }
     }
-
+    public class ReverserClass : IComparer
+    {
+        // Call CaseInsensitiveComparer.Compare with the parameters reversed.
+        int IComparer.Compare(object x, object y)
+        {
+            return ((new CaseInsensitiveComparer()).Compare(y, x));
+        }
+    }
 
 
     public class HomeController : Controller
@@ -35,15 +46,23 @@ namespace MVCWebApp.Controllers
 
         private readonly IMailService _mailService;
         private readonly ICyberSecurity _cyberSecurity;
+        private readonly IWebHostEnvironment _hostingEnvironment;
 
         [TempData]
         public string StatusMessage { get; set; }
 
-        public HomeController(ICyberSecurity cybersecurity, IMailService mailService, ILogger<HomeController> logger, UserManager<ApplicationUser> userManager)//, IHttpContextAccessor httpContextAccessor)
+        public HomeController(
+            ICyberSecurity cybersecurity,
+            IMailService mailService,
+            ILogger<HomeController> logger,
+            UserManager<ApplicationUser> userManager,
+            IWebHostEnvironment hostingEnvironment
+            )//, IHttpContextAccessor httpContextAccessor)
         {
             _logger = logger;
             _mailService = mailService;
             _cyberSecurity = cybersecurity;
+            _hostingEnvironment = hostingEnvironment;
             //_userManager = userManager;
             //_httpContextAccessor = httpContextAccessor;
 
@@ -59,12 +78,12 @@ namespace MVCWebApp.Controllers
         [HttpPost]
         public async Task<IActionResult> SendEmail([FromForm] MailRequest request)
         {
-            if(ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 try
                 {
                     StatusMessage = await _mailService.SendEmailAsync(request);
-                    StatusMessage = StatusMessage.Contains("Requested mail action okay, completed")? "Success! Email sent" :  "Email not sent";
+                    StatusMessage = StatusMessage.Contains("Requested mail action okay, completed") ? "Success! Email sent" : "Email not sent";
                     return RedirectToAction("Index");
                     //return Ok();
                 }
@@ -76,7 +95,7 @@ namespace MVCWebApp.Controllers
                 }
 
             }
-            StatusMessage = "Error sending email.";// ex.Message;
+            StatusMessage = "Error sending email.";
             return View("SendMail");
 
         }
@@ -85,10 +104,61 @@ namespace MVCWebApp.Controllers
             return "heartbeat";
         }
 
+        public async Task<IActionResult> DownloadFile(string fileName)
+        {
+            if (string.IsNullOrEmpty(fileName) || fileName == null)
+            {
+                return Content("File Name is Empty...");
+            }
 
+            // get the filePath
+            var filePath = Path.Combine(Directory.GetCurrentDirectory(),
+                "ServerFiles", fileName);
+
+            // create a memorystream
+            var memoryStream = new MemoryStream();
+
+            using (var stream = new FileStream(filePath, FileMode.Open))
+            {
+                await stream.CopyToAsync(memoryStream);
+            }
+            // set the position to return the file from
+            memoryStream.Position = 0;
+
+            // Get the MIMEType for the File
+            var mimeType = (string file) =>
+            {
+                new Microsoft.AspNetCore.StaticFiles.FileExtensionContentTypeProvider().TryGetContentType(file, out string contentType);
+                //var extension = Path.GetExtension(file).ToLowerInvariant();
+                return contentType;
+            };
+
+            return File(memoryStream, mimeType(filePath), Path.GetFileName(filePath));
+        }
+
+
+        [Authorize(Roles = "SuperAdmin")]
+        public IActionResult FileIndex()
+        {
+
+            //var fileModels = new FilesModels();
+
+            var provider = new PhysicalFileProvider(_hostingEnvironment.ContentRootPath);
+            var contents = provider.GetDirectoryContents("wwwroot/downloads");// string.Empty);
+
+            //var filePath = Path.Combine("wwwroot", "js", "site.js");
+            //var fileInfo = provider.GetFileInfo(filePath);
+
+            //var list = contents.ToArray();
+            //Array.Sort(list, (f1, f2) => f2.IsDirectory.CompareTo(f1.IsDirectory));
+
+            var result = contents.OrderBy(p => !p.IsDirectory).ThenBy(p => p.Name);
+
+            return View(result);
+        }
         public IActionResult Index()
         {
-            
+
             return View();
         }
 
@@ -118,6 +188,50 @@ namespace MVCWebApp.Controllers
         {
             return View();
         }
+        public IActionResult ResizeTest()
+        {
+            return View();
+        }
+        public IActionResult PromiseTest()
+        {
+            return View();
+        }
+
+        public JsonResult GetJson()
+        {
+            var thing = new
+            {
+                wotsit = 0,
+                otherThing = "testy"
+
+
+            };
+            JsonResult res = new JsonResult(new
+            {
+                thing,
+                objOne = new
+                {
+                    success = true,
+                    test = "good",
+                    enquiryType = "new",
+                    number = 4
+                },
+                objTwo = new
+                {
+                    success = true,
+                    test = "very good",
+                    enquiryType = "stale",
+                    number = 45.8,
+                    history = "long term",
+                    maidenName = "Gilchrist",
+                    bigTest = 1009009.90099
+                },
+
+            });
+
+            return res;
+        }
+
 
         [HttpGet]
         public IActionResult Test()

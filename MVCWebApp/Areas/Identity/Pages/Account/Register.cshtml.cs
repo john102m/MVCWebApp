@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
+using MVCWebApp.Areas.Services;
 using MVCWebApp.Models;
 
 namespace MVCWebApp.Areas.Identity.Pages.Account
@@ -24,13 +25,13 @@ namespace MVCWebApp.Areas.Identity.Pages.Account
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly ILogger<RegisterModel> _logger;
-        private readonly IEmailSender _emailSender;
+        private readonly IMailService _emailSender;
 
         public RegisterModel(
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
             ILogger<RegisterModel> logger,
-            IEmailSender emailSender)
+            IMailService emailSender)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -82,6 +83,16 @@ namespace MVCWebApp.Areas.Identity.Pages.Account
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             if (ModelState.IsValid)
             {
+
+                //var isUniqueEmail = (await _userManager.FindByEmailAsync(Input.Email) == null);
+                //if (!isUniqueEmail)
+                //{
+
+                //    ModelState.AddModelError(string.Empty, "Email already in use.");
+                //    return Page();
+                //}
+
+
                 MailAddress address = new MailAddress(Input.Email);
                 string userName = address.User;
                 var user = new ApplicationUser
@@ -91,22 +102,38 @@ namespace MVCWebApp.Areas.Identity.Pages.Account
                     FirstName = Input.FirstName,
                     LastName = Input.LastName
                 };
+
+
                 //var user = new ApplicationUser { UserName = Input.Email, Email = Input.Email };
+                
+
                 var result = await _userManager.CreateAsync(user, Input.Password);
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User created a new account with password.");
                     await _userManager.AddToRoleAsync(user, Roles.Basic.ToString());
+
+
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                     code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
+
+
                     var callbackUrl = Url.Page(
                         "/Account/ConfirmEmail",
                         pageHandler: null,
                         values: new { area = "Identity", userId = user.Id, code = code, returnUrl = returnUrl },
                         protocol: Request.Scheme);
 
-                    await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
-                        $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+
+                    var req = new MailRequest()
+                    {
+                        ToEmail = Input.Email,
+                        Subject = "Confirm your email",
+                        Body = $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>."
+                    };
+
+
+                    await _emailSender.SendEmailAsync(req);
 
                     if (_userManager.Options.SignIn.RequireConfirmedAccount)
                     {

@@ -1,0 +1,139 @@
+[
+  {
+    "id": "6295ffb47c2f7a47a6a46061",
+    "email": "michael_barry@voratak.goo",
+    "roles": [
+      "admin",
+      "guest"
+    ],
+    "apiKey": "54d08c33-ee72-4070-8f9f-dc5f0d45a634",
+    "profile": {
+      "dob": "1994-04-16",
+      "name": "Michael Barry",
+      "about": "Sint anim qui minim eu sunt ut id. Enim eiusmod dolor duis elit est excepteur enim aliqua sint est proident excepteur.",
+      "address": "1 Senator Street, Nash, Hawaii",
+      "company": "Voratak",
+      "location": {
+        "lat": 48.403344,
+        "long": -120.844499
+      }
+    },
+    "username": "michael94",
+    "createdAt": "2014-07-11T14:48:22.417Z",
+    "updatedAt": "2014-07-12T14:48:22.417Z"
+  },
+  {
+    "id": "6295ffb4e36506e1a00f4f41",
+    "email": "morgan_moses@norsul.schmidt",
+    "roles": [
+      "guest"
+    ],
+    "apiKey": "23bb2da9-0004-458a-9bff-fb653ef62617",
+    "profile": {
+      "dob": "1993-08-12",
+      "name": "Morgan Moses",
+      "about": "Anim aliquip laboris labore enim. Nulla excepteur consequat adipisicing tempor ea Lorem non cupidatat commodo.",
+      "address": "57 Oceanic Avenue, Bridgetown, Puerto Rico",
+      "company": "Norsul",
+      "location": {
+        "lat": 54.791416,
+        "long": 77.661689
+      }
+    },
+    "username": "morgan93",
+    "createdAt": "2013-02-16T18:35:21.256Z",
+    "updatedAt": "2013-02-17T18:35:21.256Z"
+  },
+  {
+    "id": "6295ffb40aee7a8231a67cda",
+    "email": "cora_douglas@shepard.lu",
+    "roles": [
+      "owner",
+      "guest"
+    ],
+    "apiKey": "12f66c6f-4ba2-40b4-954a-586640b77619",
+    "profile": {
+      "dob": "1993-10-14",
+      "name": "Cora Douglas",
+      "about": "Ex irure nulla quis anim cillum amet nostrud do pariatur sunt est occaecat. Nisi elit ea aute aliquip est voluptate anim officia deserunt proident incididunt elit qui.",
+      "address": "29 Congress Street, Fowlerville, Maine",
+      "company": "Shepard",
+      "location": {
+        "lat": 54.193954,
+        "long": 0.236593
+      }
+    },
+    "username": "cora93",
+    "createdAt": "2010-10-16T16:26:07.947Z",
+    "updatedAt": "2010-10-17T16:26:07.947Z"
+  },
+  {
+    "id": "6295ffb4bcaa9c0ccded187f",
+    "email": "mays_cantrell@enomen.wedding",
+    "roles": [
+      "member",
+      "admin"
+    ],
+    "apiKey": "e0a97603-9568-4bd0-a841-aec38e1116a7",
+    "profile": {
+      "dob": "1993-02-02",
+      "name": "Mays Cantrell",
+      "about": "Minim eu non consequat commodo reprehenderit esse ipsum nulla irure do adipisicing. Cillum laborum enim laboris exercitation eiusmod sunt excepteur officia magna occaecat.",
+      "address": "81 Overbaugh Place, Dowling, South Carolina",
+      "company": "Enomen",
+      "location": {
+        "lat": 87.317246,
+        "long": -46.127522
+      }
+    },
+    "username": "mays93",
+    "createdAt": "2013-07-03T08:06:33.799Z",
+    "updatedAt": "2013-07-04T08:06:33.799Z"
+  },
+  {
+    "id": "6295ffb43f8b8b9ddb65c150",
+    "email": "sargent_bass@comvene.organic",
+    "roles": [
+      "guest",
+      "owner"
+    ],
+    "apiKey": "50557358-6677-48e4-8feb-42bea2c2d179",
+    "profile": {
+      "dob": "1994-04-29",
+      "name": "Sargent Bass",
+      "about": "Nulla aute ex commodo quis laboris consequat eiusmod cillum voluptate amet aliquip. Occaecat reprehenderit culpa fugiat consectetur mollit nulla consectetur officia labore exercitation pariatur aliquip.",
+      "address": "51 Clinton Street, Imperial, Illinois",
+      "company": "Comvene",
+      "location": {
+        "lat": 26.871399,
+        "long": 79.389379
+      }
+    },
+    "username": "sargent94",
+    "createdAt": "2011-01-21T01:02:12.321Z",
+    "updatedAt": "2011-01-22T01:02:12.321Z"
+  },
+  {
+    "id": "6295ffb40ddd9c71a07570f5",
+    "email": "miranda_cherry@pathways.bio",
+    "roles": [
+      "guest",
+      "owner"
+    ],
+    "apiKey": "635a15d4-0506-4c3f-8f38-016fca238590",
+    "profile": {
+      "dob": "1993-05-19",
+      "name": "Miranda Cherry",
+      "about": "Non consectetur Lorem occaecat duis fugiat aliqua reprehenderit sunt dolore proident. Ad minim non culpa aliqua ullamco ex minim.",
+      "address": "81 Erskine Loop, Malo, Kentucky",
+      "company": "Pathways",
+      "location": {
+        "lat": -24.101374,
+        "long": -61.315201
+      }
+    },
+    "username": "miranda93",
+    "createdAt": "2012-03-19T04:13:39.654Z",
+    "updatedAt": "2012-03-20T04:13:39.654Z"
+  }
+]

@@ -33,7 +33,7 @@
         <div class="grid-element">
 
             <div class="card">
-                <img loading="lazy" class="card--avatar" src="~/images/gridImages/@item.Name">
+                <img class="card--avatar" src="~/images/gridImages/@item.Name">
                 <h3 class="card--title">@item.Name</h3>
                 <button class="card--link" onclick="showModal(this)">View</button>
                 @*<a class="card--link" asp-action="" asp-route-filename="@Url.Content(item.PhysicalPath)">View</a>
@@ -73,6 +73,8 @@
     function showModal(e) {
         var fName = $(e).siblings()[0].attributes[1].textContent;
 
+
+        debugger;
         $('#imgModal').attr('src', fName);
 
         if (window.innerWidth > 768) {

@@ -44,6 +44,15 @@
 
     <button>Click me to hide myclass paragraphs</button>
     <button id="share-button">Share</button>
+    <button id="get-button" onclick="getData()">Get Test Data</button>
+    <button id="post-button" onclick="postDirectData()">Post Direct Test Data</button>
+    <div id="data-post-result">The result of post</div>
+    <button id="put-button" onclick="putDirectData()">Put Direct Test Data</button>
+    <div id="data-put-result">The result of put</div>
+    <button id="get-direct-button" onclick="getDirectData()">Get Direct Test Data</button>
+    <div id="data">The data will go here</div>    
+    <button id="get-plain-button" onclick="postPlainData()">Get(Post) Pain Test Data</button>
+    <div id="plain-data">The data will go here</div>
 
 
 </div>
@@ -60,96 +69,221 @@
 
 *@
 
-<script type="text/javascript" src="~/js/TestFile1.js"></script>
-<script>
+@*<script type="text/javascript" src="~/js/TestFile1.js"></script>
+*@<script>
 
 
+      async function postPlainData() {
 
-    $(document).ready(function() {
+        var details = {
+            'id': 14,
+            'name': "blobbblyboblyby",
+            'iscomplete' : false
+        };
 
-
-
-        $('#share-button').on('click', () => {
-            if (navigator.share) {
-                navigator.share({
-                    title: 'Web Share API Draft',
-                    text: 'Take a look at this spec!',
-                    url: 'https://wicg.github.io/web-share/#share-method',
-                })
-                    .then(() => console.log('Successful share'))
-                    .catch((error) => console.log('Error sharing', error));
-            } else {
-                console.log('Share not supported on this browser, do it the old way.');
-            }
-        });
-
-
-
-        var date1 = "15/04/2021";
-        let ms1 = Date.parse(AdjustDateFormat(date1));
-
-        var date2 = "16/04/2022";
-        let ms2 = Date.parse(AdjustDateFormat(date2));
-
-        var result = moment(date1, "DD-MM-YYYY").diff(moment(date2, "DD-MM-YYYY"));
-        console.log(result);
-
-
-        $('#pageTitle').html("The Heading");
-
-        $("button").click(function() {
-            //$("p").hide();
-            //$("p.myclass[data='test']").hide();
-
-            $("p.myclass[data='test']").fadeTo("slow", 0.00, function() { //fade
-                $(this).slideUp("slow", function() { //slide up
-                    $(this).remove(); //then remove from the DOM
-                });
-            });
-
-            $("div.myclass[data='test']").fadeTo("slow", 0.00, function() { //fade
-                $(this).slideUp("slow", function() { //slide up
-                    $(this).remove(); //then remove from the DOM
-                });
-            });
-        });
-
-
-
-
-        function AdjustDateFormat(date) {
-            let arr = date.split('/');
-            date = arr[1] + '/' + arr[0] + '/' + arr[2];
-            return date;
+        var formBody = [];
+        for (var property in details) {
+          var encodedKey = encodeURIComponent(property);
+          var encodedValue = encodeURIComponent(details[property]);
+          formBody.push(encodedKey + "=" + encodedValue);
         }
-        var number = 1;
+        formBody = formBody.join("&");
+
+        var url = 'https://data.spooch.co.uk/plaininsert/?';
+        console.log(formBody);
+        url+=formBody;
+        console.log(url);
+
+        await fetch(url, {
+            method: 'get',
+            headers:{'content-type': 'text/plain'}
 
 
-        var strStyle = `<pre><b style='font-size:40px'><i>result ${number}:</i>    `;
-        $('#test1').html(strStyle + ms1 + "</b></pre>");
+        }).then(function(res) {
+            console.log(res);
+            $('#data-put-result').html(res);
+        });
+      }
 
-        number = 2;
-        strStyle = `<pre><b style='font-size:40px'><i>result ${number}:</i>    `;
-        $('#test2').html(strStyle + (ms1 > ms2) + "</b></pre>");
+      async function putDirectData() {
 
-        myObj = {
-            name: "World!",
-        };
+          var obj = {
 
-        obj = {
-            x: 10,
-            y: 800,
-            name: "Origin",
-            randprop: { test1: 3, test2: "won't see this" }
-        };
+              "Name": "Overwrite data at ID 14",
+              "IsComplete": false
 
-        logPoint(obj);
-        document.getElementById("test").innerHTML = logName(obj)
-            + "<br/>" + logName(myObj)
-            + "<br/>" + logName({ name: "Foonterbinty" })
-            + "<br/>" + logPoint(obj)
-            + "<br/>" + logPoint({ x: 5.090, y: 9 });
-    });
+          }
+
+          await fetch('https://data.spooch.co.uk/todo/update/14', {
+              method: 'post',
+              headers: { 'content-type': 'application/json' },
+
+              body: JSON.stringify(obj)
+          }).then(function(res) {
+              console.log(res);
+              $('#data-put-result').html(res);
+          });
+      }
+      async function postDirectData() {
+
+          var obj = {
+              "Name": "A test insert of some new data",
+              "IsComplete": false
+
+          }
+
+          await fetch('https://data.spooch.co.uk/todo/insert', {
+              method: 'post',
+              headers: { 'content-type': 'application/json' },
+
+              body: JSON.stringify(obj)
+          }).then(function(res) {
+              console.log(res);
+              $('#data-post-result').html(res);
+          });
+      }
+
+      async function getDirectData() {
+
+          let url = 'https://data.spooch.co.uk/todoitems';
+          try {
+              let res = await fetch(url);
+              await res.json().then(r => displayData(r));
+          } catch (error) {
+              console.log(error);
+          }
+
+      }
+
+      async function getData() {
+
+          //const rawResponse = await fetch("https://" + window.location.host + "/home/GetData", {
+          const rawResponse = await fetch("https://movies.spooch.co.uk/home/getdata", {
+              method: 'GET',
+              headers: {
+                  'Accept': 'application/json',
+              }
+
+          }).then((res) => {
+              console.log(res);
+              if (res.status === 200) {
+
+                  var jsonData = res.json();
+                  return jsonData;
+
+              } else {
+
+                  throw new Error(`Got back ${res.status}`);
+              }
+
+          }).then((data) => {
+
+              console.log(JSON.parse(data));
+              displayData(JSON.parse(data));
+
+
+          }).catch(err => {
+
+              console.error(err);
+          });
+
+      }
+
+
+      function displayData(data) {
+
+          var htm = "";
+          data.forEach((item) => {
+              htm += "ID: " + item.id + ", Todo item: " + item.name + ", Completed: " + item.isComplete + "<br/>";
+
+          });
+          $('#data').html(htm);
+
+      }
+
+      $(document).ready(function() {
+
+          $('#share-button').on('click', () => {
+              if (navigator.share) {
+                  navigator.share({
+                      title: 'Web Share API Draft',
+                      text: 'Take a look at this spec!',
+                      url: 'https://wicg.github.io/web-share/#share-method',
+                  })
+                      .then(() => console.log('Successful share'))
+                      .catch((error) => console.log('Error sharing', error));
+              } else {
+                  console.log('Share not supported on this browser, do it the old way.');
+              }
+          });
+
+
+
+          var date1 = "15/04/2021";
+          let ms1 = Date.parse(AdjustDateFormat(date1));
+
+          var date2 = "16/04/2022";
+          let ms2 = Date.parse(AdjustDateFormat(date2));
+
+          var result = moment(date1, "DD-MM-YYYY").diff(moment(date2, "DD-MM-YYYY"));
+          console.log(result);
+
+
+          $('#pageTitle').html("The Heading");
+
+          $("button").click(function() {
+              //$("p").hide();
+              //$("p.myclass[data='test']").hide();
+
+              $("p.myclass[data='test']").fadeTo("slow", 0.00, function() { //fade
+                  $(this).slideUp("slow", function() { //slide up
+                      $(this).remove(); //then remove from the DOM
+                  });
+              });
+
+              $("div.myclass[data='test']").fadeTo("slow", 0.00, function() { //fade
+                  $(this).slideUp("slow", function() { //slide up
+                      $(this).remove(); //then remove from the DOM
+                  });
+              });
+          });
+
+
+
+
+          function AdjustDateFormat(date) {
+              let arr = date.split('/');
+              date = arr[1] + '/' + arr[0] + '/' + arr[2];
+              return date;
+          }
+          var number = 1;
+
+
+          var strStyle = `<pre><b style='font-size:40px'><i>result ${number}:</i>    `;
+          $('#test1').html(strStyle + ms1 + "</b></pre>");
+
+          number = 2;
+          strStyle = `<pre><b style='font-size:40px'><i>result ${number}:</i>    `;
+          $('#test2').html(strStyle + (ms1 > ms2) + "</b></pre>");
+
+          myObj = {
+              name: "World!",
+          };
+
+          obj = {
+              x: 10,
+              y: 800,
+              name: "Origin",
+              randprop: { test1: 3, test2: "won't see this" }
+          };
+
+          //    logPoint(obj);
+          //    document.getElementById("test").innerHTML = logName(obj)
+          //        + "<br/>" + logName(myObj)
+          //        + "<br/>" + logName({ name: "Foonterbinty" })
+          //        + "<br/>" + logPoint(obj)
+          //        + "<br/>" + logPoint({ x: 5.090, y: 9 });
+      });
 </script>
 
 <style>

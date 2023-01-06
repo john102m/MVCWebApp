@@ -49,6 +49,7 @@ namespace MVCWebApp
             //    );
             // in order to use DI for the cyber security thing the connection string is moved to the dbcontext class
             services.AddDbContext<ApplicationDbContext>();
+            services.AddDbContext<TodoDbContext>();
 
             services.AddIdentity<ApplicationUser, IdentityRole>()
                     .AddEntityFrameworkStores<ApplicationDbContext>()

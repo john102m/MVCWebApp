@@ -365,3 +365,5 @@ MigrationBackup/
 FodyWeavers.xsd
 /MVCWebApp/wwwroot/js/TestFile1.js
 /MVCWebApp/wwwroot/js/TestFile1.js.map
+/MVCWebApp/wwwroot/images/gridImages
+/MVCWebApp/wwwroot/images/banner-small.jpg

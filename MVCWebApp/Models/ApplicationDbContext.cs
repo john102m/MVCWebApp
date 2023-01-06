@@ -6,6 +6,7 @@ using MVCWebApp.Areas.Services;
 
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Microsoft.Data.SqlClient;
+using MVCWebApp.Models;
 
 namespace MVCWebApp.Models
 {
@@ -81,5 +82,7 @@ namespace MVCWebApp.Models
         }
 
         public DbSet<Movie> Movie { get; set; }
+
+        //public DbSet<MVCWebApp.Models.Todo> Todo { get; set; }
     }
 }

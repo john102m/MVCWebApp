@@ -15,4 +15,4 @@ setInterval(function () {
 
 
     postMessage(data);
-}, 120000);
+}, 240000);

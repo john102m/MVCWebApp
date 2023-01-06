@@ -38,7 +38,6 @@ namespace MVCWebApp
                     //context.Database.Connection.ConnectionString = "";
 
 
-
                     var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
                     var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
                     await ContextSeed.SeedRolesAsync(userManager, roleManager);

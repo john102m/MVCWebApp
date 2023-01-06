@@ -16,7 +16,15 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
 using System.Collections;
-
+using System.Net;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using MimeKit;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using NuGet.Protocol.Plugins;
+using Microsoft.Extensions.Options;
+using static Org.BouncyCastle.Math.EC.ECCurve;
 
 namespace MVCWebApp.Controllers
 {
@@ -47,6 +55,7 @@ namespace MVCWebApp.Controllers
         private readonly IMailService _mailService;
         private readonly ICyberSecurity _cyberSecurity;
         private readonly IWebHostEnvironment _hostingEnvironment;
+        private readonly TodoDbContext _context;
 
         [TempData]
         public string StatusMessage { get; set; }
@@ -56,15 +65,16 @@ namespace MVCWebApp.Controllers
             IMailService mailService,
             ILogger<HomeController> logger,
             UserManager<ApplicationUser> userManager,
-            IWebHostEnvironment hostingEnvironment
+            IWebHostEnvironment hostingEnvironment,
+            IConfiguration configuration,
+            TodoDbContext context
             )//, IHttpContextAccessor httpContextAccessor)
         {
             _logger = logger;
             _mailService = mailService;
             _cyberSecurity = cybersecurity;
             _hostingEnvironment = hostingEnvironment;
-            //_userManager = userManager;
-            //_httpContextAccessor = httpContextAccessor;
+            _context = context;
 
         }
 
@@ -103,37 +113,33 @@ namespace MVCWebApp.Controllers
         {
             return "heartbeat";
         }
-
-        public async Task<IActionResult> DownloadFile(string fileName)
+        public IActionResult DownloadFile(string fileName)
         {
-            if (string.IsNullOrEmpty(fileName) || fileName == null)
+            return PhysicalFile(fileName, MimeTypes.GetMimeType(fileName), Path.GetFileName(fileName));
+        }
+
+
+
+        [HttpGet]
+        public async Task<string> GetData()
+        {
+            try
             {
-                return Content("File Name is Empty...");
+                using HttpClient client = new HttpClient();
+                return await client.GetStringAsync("https://data.spooch.co.uk/todo");
+
+            }
+            catch (Exception e)
+            {
+                return e.ToString();
             }
 
-            // get the filePath
-            var filePath = Path.Combine(Directory.GetCurrentDirectory(),
-                "ServerFiles", fileName);
+        }
 
-            // create a memorystream
-            var memoryStream = new MemoryStream();
-
-            using (var stream = new FileStream(filePath, FileMode.Open))
-            {
-                await stream.CopyToAsync(memoryStream);
-            }
-            // set the position to return the file from
-            memoryStream.Position = 0;
-
-            // Get the MIMEType for the File
-            var mimeType = (string file) =>
-            {
-                new Microsoft.AspNetCore.StaticFiles.FileExtensionContentTypeProvider().TryGetContentType(file, out string contentType);
-                //var extension = Path.GetExtension(file).ToLowerInvariant();
-                return contentType;
-            };
-
-            return File(memoryStream, mimeType(filePath), Path.GetFileName(filePath));
+        public async Task<IActionResult> Todos()
+        {
+            var model = await _context.TodoItems.OrderByDescending(x => x.DateAdded).ToListAsync();
+            return View(model);
         }
 
 
@@ -142,18 +148,15 @@ namespace MVCWebApp.Controllers
         {
 
             //var fileModels = new FilesModels();
-
             var provider = new PhysicalFileProvider(_hostingEnvironment.ContentRootPath);
             var contents = provider.GetDirectoryContents("wwwroot/downloads");// string.Empty);
 
             //var filePath = Path.Combine("wwwroot", "js", "site.js");
             //var fileInfo = provider.GetFileInfo(filePath);
-
             //var list = contents.ToArray();
             //Array.Sort(list, (f1, f2) => f2.IsDirectory.CompareTo(f1.IsDirectory));
 
             var result = contents.OrderBy(p => !p.IsDirectory).ThenBy(p => p.Name);
-
             return View(result);
         }
         public IActionResult Index()
@@ -196,7 +199,15 @@ namespace MVCWebApp.Controllers
         {
             return View();
         }
+        public IActionResult ImageGridView()
+        {
 
+            var provider = new PhysicalFileProvider(_hostingEnvironment.ContentRootPath);
+            var contents = provider.GetDirectoryContents("wwwroot/images/gridimages");// string.Empty)
+            var result = contents.OrderBy(p => !p.IsDirectory).ThenBy(p => p.Name);
+
+            return View(result);
+        }
         public JsonResult GetJson()
         {
             var thing = new
@@ -329,6 +340,7 @@ namespace MVCWebApp.Controllers
         {
             return Request.Cookies[key];
         }
+
         public IActionResult JSTree()
         {
             //EITHER

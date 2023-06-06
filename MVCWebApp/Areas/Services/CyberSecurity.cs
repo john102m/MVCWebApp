@@ -59,7 +59,7 @@ namespace MVCWebApp.Areas.Services
                     }
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return string.Empty;
             }

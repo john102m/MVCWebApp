@@ -47,7 +47,7 @@ namespace MVCWebApp
                 }
                 catch (Exception ex)
                 {
-                    throw;
+                    //throw;
                     //var logger = loggerFactory.CreateLogger<Program>();
                     //logger.LogError(ex, "An error occurred seeding the DB.");
                 }

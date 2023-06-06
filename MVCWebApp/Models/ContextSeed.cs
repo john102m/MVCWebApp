@@ -21,15 +21,17 @@ namespace MVCWebApp.Models
             //Seed Roles
 
             //cast the enums directly to a string array
-            foreach(var item in Enum.GetValues(typeof(Roles)))
+            foreach (var item in Enum.GetValues(typeof(Roles)))
             {
                 await roleManager.CreateAsync(new IdentityRole(item.ToString()));
-                
+
             }
             //await roleManager.CreateAsync(new IdentityRole(Roles.SuperAdmin.ToString()));
             //await roleManager.CreateAsync(new IdentityRole(Roles.Admin.ToString()));
             //await roleManager.CreateAsync(new IdentityRole(Roles.Moderator.ToString()));
             //await roleManager.CreateAsync(new IdentityRole(Roles.Basic.ToString()));
+
+
         }
         public static async Task SeedSuperAdminAsync(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
         {
